@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="io.github.hexafraction.balance_checker.MainWindow">
+  <grid id="27dc6" binding="contentPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="533" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="bd14b" binding="btnsPane" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints border-constraint="North"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="214ae" class="javax.swing.JButton" binding="pasteAddressesButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <label value="Add addresses..."/>
+              <text value="Add addresses..."/>
+            </properties>
+          </component>
+          <component id="6fda5" class="javax.swing.JButton" binding="loadFromFileButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="Load from file..."/>
+            </properties>
+          </component>
+          <component id="8ee9" class="javax.swing.JButton" binding="clearListButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="Clear list"/>
+            </properties>
+          </component>
+          <component id="fa25b" class="javax.swing.JButton" binding="getBalancesButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="Get balances!"/>
+            </properties>
+          </component>
+          <component id="583fc" class="javax.swing.JButton" binding="exportButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="Export"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <component id="793fa" class="javax.swing.JLabel" binding="ttl">
+        <constraints border-constraint="South"/>
+        <properties>
+          <font swing-font="TextArea.font"/>
+          <text value="Total: 0"/>
+        </properties>
+      </component>
+      <scrollpane id="94c97">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="bf2cc" class="javax.swing.JTable" binding="tbl" custom-create="true">
+            <constraints/>
+            <properties>
+              <fillsViewportHeight value="true"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+    </children>
+  </grid>
+</form>
