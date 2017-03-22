@@ -136,6 +136,7 @@ public class MainWindow {
                         String concatenated = Joiner.on(',').join(sublist);
                         HttpClient client = new HttpClient();
                         HttpMethod method = new GetMethod("http://btc.blockr.io/api/v1/address/balance/" + concatenated);
+                        method.setRequestHeader("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0");
                         System.out.println("http://btc.blockr.io/api/v1/address/balance/" + concatenated);
                         //publish(Collections.nCopies(sublist.size(), 125.2).toArray(new Double[0]));
                         try {
@@ -144,13 +145,24 @@ public class MainWindow {
                             if (method.getStatusCode() == HttpStatus.SC_OK) {
                                 String response = method.getResponseBodyAsString();
                                 JSONObject jo = new JSONObject(response);
-                                JSONArray arr = jo.getJSONArray("data");
-                                int len = arr.length();
-                                Double[] pubval = new Double[len];
-                                for (int i = 0; i < len; i++) {
-                                    pubval[i] = arr.getJSONObject(i).getDouble("balance");
+                                Object data = jo.get("data");
+                                if(data instanceof JSONArray) {
+                                    JSONArray arr = jo.getJSONArray("data");
+                                    int len = arr.length();
+                                    Double[] pubval = new Double[len];
+                                    for (int i = 0; i < len; i++) {
+                                        pubval[i] = arr.getJSONObject(i).getDouble("balance");
+                                    }
+
+                                    publish(pubval);
+                                } else {
+                                    JSONObject dataObj = (JSONObject) data;
+                                    Double[] pubval = new Double[1];
+                                    pubval[0] = ((JSONObject) data).getDouble("balance");
+                                    publish(pubval);
                                 }
-                                publish(pubval);
+                            } else {
+                                System.err.println("Breakpoint");
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
