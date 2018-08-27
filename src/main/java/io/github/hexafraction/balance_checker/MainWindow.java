@@ -122,9 +122,9 @@ public class MainWindow {
 
                     @Override
                     protected Exception doInBackground() throws Exception {
-                        for (int i = 0; i < dm.addresses.size(); i += 20) {
+                        for (Address addr : dm.addresses) {
                             try {
-                                doRequest(dm.addresses.subList(i, Math.min(i + 20, dm.addresses.size())));
+                                doRequest(addr.addr);
                             } catch (Exception e) {
                                 return e;
                             }
@@ -132,35 +132,19 @@ public class MainWindow {
                         return null;
                     }
 
-                    private void doRequest(List<Address> sublist) throws Exception {
-                        String concatenated = Joiner.on(',').join(sublist);
+                    private void doRequest(String addr) throws Exception {
                         HttpClient client = new HttpClient();
-                        HttpMethod method = new GetMethod("http://btc.blockr.io/api/v1/address/balance/" + concatenated);
+                        String uri = String.format("https://blockexplorer.com/api/addr/%s/balance", addr);
+                        HttpMethod method = new GetMethod(uri);
                         method.setRequestHeader("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0");
-                        System.out.println("http://btc.blockr.io/api/v1/address/balance/" + concatenated);
+                        System.out.println(uri);
                         //publish(Collections.nCopies(sublist.size(), 125.2).toArray(new Double[0]));
                         try {
                             client.executeMethod(method);
 
                             if (method.getStatusCode() == HttpStatus.SC_OK) {
                                 String response = method.getResponseBodyAsString();
-                                JSONObject jo = new JSONObject(response);
-                                Object data = jo.get("data");
-                                if(data instanceof JSONArray) {
-                                    JSONArray arr = jo.getJSONArray("data");
-                                    int len = arr.length();
-                                    Double[] pubval = new Double[len];
-                                    for (int i = 0; i < len; i++) {
-                                        pubval[i] = arr.getJSONObject(i).getDouble("balance");
-                                    }
-
-                                    publish(pubval);
-                                } else {
-                                    JSONObject dataObj = (JSONObject) data;
-                                    Double[] pubval = new Double[1];
-                                    pubval[0] = ((JSONObject) data).getDouble("balance");
-                                    publish(pubval);
-                                }
+                                publish(Double.parseDouble(response)/ 100_000_000.0);
                             } else {
                                 System.err.println("Breakpoint");
                             }
